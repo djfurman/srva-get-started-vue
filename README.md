@@ -1,2 +1,21 @@
-# srva-get-started-vue
-A VueJS based UI for calling the serverless application
+# web
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```

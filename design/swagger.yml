@@ -1,0 +1,118 @@
+swagger: '2.0'
+info:
+  description: This is a simple API
+  version: 0.1.0
+  title: Simple Contact Information Gathering API
+  # put the contact info for your development or API team
+  contact:
+    email: serverlessrva@gmail.com
+
+  license:
+    name: BSD-3-Clause
+    url: https://opensource.org/licenses/BSD-3-Clause
+
+paths:
+  /applicant:
+    get:
+      summary: Retrieve a collection of applicants
+      operationId: fetchApplicants
+      description: Fetch a collection of applicants who have submitted their information for follow up
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Collection of results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ApplicantContact'
+        500:
+          description: Error response showing that something went wrong
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    post:
+      summary: Add an applicant to the system for later contact
+      operationId: createApplicant
+      description: Capture the applicant's contact information and details storing them for later retrieval
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: applicant
+        description: Applicant Info
+        schema:
+          $ref: '#/definitions/ApplicantContact'
+      responses:
+        201:
+          description: Applicant was successfully stored for alter usage
+          headers:
+            location:
+              type: string
+              description: URI where the data created can be retrieved
+          schema:
+            type: object
+            properties:
+              id:
+                description: Identifier assigned to the applicant and stored for long term usage
+                type: string
+                example: 'a6b2d4fa-2267-4ee0-a226-0838aa078607'
+        424:
+          description: The server understood the request but could not fulfill it
+          schema:
+            type: object
+            properties:
+              validation_errors:
+                type: array
+                items:
+                  type: object
+                  description: description of the error and what the user can do to fix it
+                  properties:
+                    property_name:
+                      type: string
+                      example: first_name
+                      description: Pointer to the part of the body in violation of the rule
+                    problem_description:
+                      type: string
+                      example: The first name cannot be empty
+                      description: User friendly description to be displayed when the violation occurs
+        500:
+          description: The server encountered an internal error and could not process the request
+definitions:
+  ApplicantContact:
+    type: object
+    required:
+    - first_name
+    - last_name
+    properties:
+      first_name:
+        type: string
+        description: First or given name of the applicant
+        example: John
+      last_name:
+        type: string
+        description: Surname or last name of the applicant
+        example: Doe
+      email_address:
+        type: string
+        description: Preferred contact email address of the applicant
+        example: john.doe.10x-developer@example.com
+      mesasge:
+        type: string
+        description: Text message the applicant wants to leave for the recruiter following up
+        example: I had a great time talking with you about serverless development and would love to talk more about opportunities to do it with your company!
+  ErrorResponse:
+    type: object
+    required:
+    - error_message
+    properties:
+      error_message:
+        type: string
+        description: A message intended for developers to understand and troubleshoot the issue
+        example: 'The internets are broken!'
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /MKProjects/ServerlessExample/1.0.0
+schemes:
+ - https
